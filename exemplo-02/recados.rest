@@ -1,0 +1,47 @@
+
+@baseURL = http://localhost:3000
+@id = 1
+@offset = 0
+@limit = 10
+
+# RECADOS
+
+###  RecadosControllerFindAll
+GET {{baseURL}}/recados?offset={{offset}}&limit={{limit}}
+
+
+### RecadosControllerFindOne
+GET {{baseURL}}/recados/{{id}}
+
+
+### RecadosControllerCreate
+POST {{baseURL}}/recados
+Content-Type: application/json
+
+{
+  "texto": "Mais um outro recado",
+  "de": "João",
+  "para": "Joana"
+}
+
+
+### RecadosControllerUpdate
+PATCH {{baseURL}}/recados/{{id}}
+Content-Type: application/json
+
+{
+  "texto": "Novo conteúdo do recado"
+}
+
+### RecadosControllerUpdateFull
+PUT {{baseURL}}/recados/{{id}}
+Content-Type: application/json
+
+{
+  "texto": "Novo conteúdo do recado total",
+  "de": "João",
+  "para": "Joana"
+}
+
+### RecadosControllerRemove
+DELETE {{baseURL}}/recados/{{id}}
