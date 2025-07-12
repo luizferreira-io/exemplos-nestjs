@@ -5,7 +5,7 @@ import { ObjectSchema } from 'joi';
 export class JoiValidationPipe implements PipeTransform {
   constructor(private schema: ObjectSchema) {}
 
-  transform(value: any) {
+  transform(value: unknown): unknown {
     const { error } = this.schema.validate(value, { abortEarly: false });
     if (error) {
       throw new BadRequestException(error.details.map((d) => d.message).join(', '));

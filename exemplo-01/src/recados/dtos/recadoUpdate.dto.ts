@@ -1,6 +1,5 @@
 export class RecadoUpdateDto {
-  de: string;
-  para: string;
-  texto: string;
-  
+  de?: string;
+  para?: string;
+  texto?: string;
 }
