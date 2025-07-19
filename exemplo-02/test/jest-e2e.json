@@ -5,5 +5,25 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "collectCoverageFrom": [
+    "../src/**/*.(t|j)s",
+    "!../src/**/*.spec.ts",
+    "!../src/**/*.e2e-spec.ts",
+    "!../src/**/node_modules/**",
+    "!../src/**/coverage/**",
+    "!../src/**/dist/**",
+    "!../src/main.ts"
+  ],
+  "coverageDirectory": "../coverage-e2e",
+  "coverageReporters": ["html", "lcov", "text", "json"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 50,
+      "functions": 70,
+      "lines": 70,
+      "statements": 70
+    }
+  },
+  "setupFilesAfterEnv": []
 }

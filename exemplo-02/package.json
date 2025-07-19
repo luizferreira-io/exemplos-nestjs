@@ -5,7 +5,6 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-  "type": "module",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,14 +16,34 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:cov:html": "jest --coverage --coverageReporters=html",
+    "test:cov:lcov": "jest --coverage --coverageReporters=lcov",
+    "test:cov:json": "jest --coverage --coverageReporters=json",
+    "test:cov:all": "jest --coverage --coverageReporters=html --coverageReporters=lcov --coverageReporters=json --coverageReporters=text",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:cov": "jest --config ./test/jest-e2e.json --coverage",
+    "test:unit": "jest --testPathPattern=src/.*\\.spec\\.ts$",
+    "test:unit:cov": "jest --testPathPattern=src/.*\\.spec\\.ts$ --coverage",
+    "test:auth": "jest --testPathPattern=src/auth/.*\\.spec\\.ts$",
+    "test:auth:cov": "jest --testPathPattern=src/auth/.*\\.spec\\.ts$ --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.0",
+    "argon2": "^0.43.1",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "joi": "^17.13.3",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -36,9 +55,12 @@
     "@nestjs/testing": "^11.0.1",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.7",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
@@ -69,9 +91,33 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/*.spec.ts",
+      "!**/*.e2e-spec.ts",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!**/dist/**",
+      "!main.ts"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageReporters": [
+      "html",
+      "lcov",
+      "text",
+      "json"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 55,
+        "functions": 85,
+        "lines": 85,
+        "statements": 85
+      }
+    },
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    }
   }
 }

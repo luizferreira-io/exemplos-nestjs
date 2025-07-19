@@ -3,6 +3,7 @@ import { RecadoEntity } from './entities/recado.entity';
 import { RecadoCreateDto } from './dtos/recadoCreate.dto';
 import { RecadoUpdateDto } from './dtos/recadoUpdate.dto';
 import { RecadoUpdateFullDto } from './dtos/recadoUpdateFull.dto';
+import { PaginationParams, PaginatedResponse } from './interfaces/pagination.interface';
 
 @Injectable()
 export class RecadosService {
@@ -18,11 +19,17 @@ export class RecadosService {
     },
   ];
 
-  findAll(offset: number, limit: number): RecadoEntity[] {
-    if (offset && limit) {
-      return this.recados.slice(offset, offset + limit);
-    }
-    return this.recados;
+  findAll(params?: PaginationParams): PaginatedResponse<RecadoEntity> {
+    const { offset = 0, limit = 10 } = params || {};
+    const total = this.recados.length;
+    const data = this.recados.slice(offset, offset + limit);
+
+    return {
+      data,
+      total,
+      offset,
+      limit,
+    };
   }
 
   findOne(id: number): RecadoEntity {
@@ -35,7 +42,7 @@ export class RecadosService {
     return recado;
   }
 
-  create(dto: RecadoCreateDto): void {
+  create(dto: RecadoCreateDto): RecadoEntity {
     this.lastId++;
     const newRecado: RecadoEntity = {
       id: this.lastId,
@@ -44,18 +51,24 @@ export class RecadosService {
       ...dto,
     };
     this.recados.push(newRecado);
+    return newRecado;
   }
 
-  update(id: number, dto: RecadoUpdateDto): void {
+  update(id: number, dto: RecadoUpdateDto): RecadoEntity {
     const index = this.recados.findIndex((item) => item.id === id);
     if (index < 0) throw new NotFoundException(`Recado ${id} não encontrado`);
 
-    this.recados[index] = { ...this.recados[index], ...dto };
-    this.recados[index].data = new Date();
-    this.recados[index].lido = false;
+    this.recados[index] = {
+      ...this.recados[index],
+      ...dto,
+      data: new Date(),
+      lido: false,
+    };
+
+    return this.recados[index];
   }
 
-  updateFull(id: number, dto: RecadoUpdateFullDto): void {
+  updateFull(id: number, dto: RecadoUpdateFullDto): RecadoEntity {
     const index = this.recados.findIndex((item) => item.id === id);
     if (index < 0) throw new NotFoundException(`Recado ${id} não encontrado`);
 
@@ -65,6 +78,8 @@ export class RecadosService {
       data: new Date(),
       ...dto,
     };
+
+    return this.recados[index];
   }
 
   remove(id: number): void {
@@ -72,5 +87,12 @@ export class RecadosService {
     if (index < 0) throw new NotFoundException(`Recado ${id} não encontrado`);
 
     this.recados.splice(index, 1);
+  }
+
+  markAsRead(id: number): RecadoEntity {
+    const recado = this.findOne(id);
+    const index = this.recados.findIndex((item) => item.id === id);
+    this.recados[index].lido = true;
+    return this.recados[index];
   }
 }

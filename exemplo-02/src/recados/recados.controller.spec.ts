@@ -6,6 +6,7 @@ import { RecadoCreateDto } from './dtos/recadoCreate.dto';
 import { RecadoUpdateDto } from './dtos/recadoUpdate.dto';
 import { RecadoUpdateFullDto } from './dtos/recadoUpdateFull.dto';
 import { RecadoEntity } from './entities/recado.entity';
+import { PaginatedResponse } from './interfaces/pagination.interface';
 
 describe('RecadosController', () => {
   let controller: RecadosController;
@@ -18,6 +19,7 @@ describe('RecadosController', () => {
     update: jest.fn(),
     updateFull: jest.fn(),
     remove: jest.fn(),
+    markAsRead: jest.fn(),
   };
 
   const mockRecado: RecadoEntity = {
@@ -53,24 +55,35 @@ describe('RecadosController', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of recados', () => {
-      const mockRecados = [mockRecado];
-      mockRecadosService.findAll.mockReturnValue(mockRecados);
+    it('should return a paginated response', () => {
+      const mockPaginatedResponse: PaginatedResponse<RecadoEntity> = {
+        data: [mockRecado],
+        total: 1,
+        offset: 0,
+        limit: 10,
+      };
+      mockRecadosService.findAll.mockReturnValue(mockPaginatedResponse);
 
       const result = controller.findAll(0, 10);
 
-      expect(result).toBe(mockRecados);
-      expect(service.findAll).toHaveBeenCalledWith(0, 10);
+      expect(result).toBe(mockPaginatedResponse);
+      expect(service.findAll).toHaveBeenCalledWith({ offset: 0, limit: 10 });
     });
 
     it('should call service with correct parameters', () => {
       const offset = 5;
       const limit = 15;
-      mockRecadosService.findAll.mockReturnValue([]);
+      const mockResponse: PaginatedResponse<RecadoEntity> = {
+        data: [],
+        total: 0,
+        offset: offset,
+        limit: limit,
+      };
+      mockRecadosService.findAll.mockReturnValue(mockResponse);
 
       controller.findAll(offset, limit);
 
-      expect(service.findAll).toHaveBeenCalledWith(offset, limit);
+      expect(service.findAll).toHaveBeenCalledWith({ offset, limit });
     });
   });
 
@@ -95,29 +108,37 @@ describe('RecadosController', () => {
   });
 
   describe('create', () => {
-    it('should create a new recado', () => {
+    it('should create a new recado and return it', () => {
       const createDto: RecadoCreateDto = {
         texto: 'Novo recado',
         de: 'Ana',
         para: 'Carlos',
       };
 
-      controller.create(createDto);
+      const createdRecado = { ...mockRecado, ...createDto };
+      mockRecadosService.create.mockReturnValue(createdRecado);
 
+      const result = controller.create(createDto);
+
+      expect(result).toBe(createdRecado);
       expect(service.create).toHaveBeenCalledWith(createDto);
     });
   });
 
   describe('update', () => {
-    it('should update an existing recado', () => {
+    it('should update an existing recado and return it', () => {
       const updateDto: RecadoUpdateDto = {
         texto: 'Recado atualizado',
         de: 'João',
         para: 'Maria',
       };
 
-      controller.update(1, updateDto);
+      const updatedRecado = { ...mockRecado, ...updateDto };
+      mockRecadosService.update.mockReturnValue(updatedRecado);
 
+      const result = controller.update(1, updateDto);
+
+      expect(result).toBe(updatedRecado);
       expect(service.update).toHaveBeenCalledWith(1, updateDto);
     });
 
@@ -137,16 +158,41 @@ describe('RecadosController', () => {
     });
   });
 
+  describe('markAsRead', () => {
+    it('should mark a recado as read', () => {
+      const readRecado = { ...mockRecado, lido: true };
+      mockRecadosService.markAsRead.mockReturnValue(readRecado);
+
+      const result = controller.markAsRead(1);
+
+      expect(result).toBe(readRecado);
+      expect(service.markAsRead).toHaveBeenCalledWith(1);
+    });
+
+    it('should throw NotFoundException when service throws it', () => {
+      mockRecadosService.markAsRead.mockImplementation(() => {
+        throw new NotFoundException('Recado 999 não encontrado');
+      });
+
+      expect(() => controller.markAsRead(999)).toThrow(NotFoundException);
+      expect(service.markAsRead).toHaveBeenCalledWith(999);
+    });
+  });
+
   describe('updateFull', () => {
-    it('should fully update an existing recado', () => {
+    it('should fully update an existing recado and return it', () => {
       const updateFullDto: RecadoUpdateFullDto = {
         texto: 'Recado completamente atualizado',
         de: 'Pedro',
         para: 'Ana',
       };
 
-      controller.updateFull(1, updateFullDto);
+      const updatedRecado = { ...mockRecado, ...updateFullDto };
+      mockRecadosService.updateFull.mockReturnValue(updatedRecado);
 
+      const result = controller.updateFull(1, updateFullDto);
+
+      expect(result).toBe(updatedRecado);
       expect(service.updateFull).toHaveBeenCalledWith(1, updateFullDto);
     });
 
