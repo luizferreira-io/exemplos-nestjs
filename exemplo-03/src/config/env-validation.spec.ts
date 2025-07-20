@@ -1,6 +1,7 @@
 import { validateEnv } from './env-validation';
 
 describe('validateEnv', () => {
+  /* eslint-disable no-console */
   const originalProcessExit = process.exit;
   const originalConsoleError = console.error;
 
@@ -201,4 +202,5 @@ describe('validateEnv', () => {
       expect(process.exit).not.toHaveBeenCalled();
     });
   });
+  /* eslint-enable no-console */
 });

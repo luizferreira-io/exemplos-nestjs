@@ -39,11 +39,11 @@ export function getConfigService(module: TestingModule): ConfigService {
 /**
  * Cria um mock básico do ConfigService para testes unitários
  */
-export function createMockConfigService(overrides: Record<string, any> = {}) {
+export function createMockConfigService(overrides: Record<string, unknown> = {}) {
   const defaultConfig = { ...testEnvConfig, ...overrides };
   
   return {
-    get: jest.fn().mockImplementation((key: string, defaultValue?: any) => {
+    get: jest.fn().mockImplementation((key: string, defaultValue?: unknown) => {
       return defaultConfig[key] ?? defaultValue;
     }),
   };

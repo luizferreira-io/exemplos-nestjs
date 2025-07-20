@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validateEnv } from '../src/config/env-validation';
 import { dotEnvSchema } from '../src/schemas/dotEnv.schema';
-import { testEnvConfig, setupTestEnvironment } from './test-helpers';
+import { setupTestEnvironment } from './test-helpers';
 
 describe('Configuration Integration Tests', () => {
   let module: TestingModule;

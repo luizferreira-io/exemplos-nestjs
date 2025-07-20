@@ -34,6 +34,7 @@ export function validateEnv(config: Record<string, unknown>) {
     console.error('\n\n');
     /* eslint-enable no-console */
 
+    //throw new Error('Configuração inválida');
     process.exit(1);
   }
 

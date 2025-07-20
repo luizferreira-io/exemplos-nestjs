@@ -1,4 +1,3 @@
-import * as Joi from 'joi';
 import { dotEnvSchema } from './dotEnv.schema';
 
 describe('dotEnvSchema', () => {
