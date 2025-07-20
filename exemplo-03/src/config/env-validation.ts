@@ -4,10 +4,12 @@ export function validateEnv(config: Record<string, unknown>) {
   const { error, value } = dotEnvSchema.validate(config, {
     abortEarly: false, // Mostra todos os erros
     allowUnknown: true, // Permite outras variáveis
-    stripUnknown: false, // Mantém outras variáveis
+    stripUnknown: true, // Não mantém outras variáveis
+    
   });
 
   if (error) {
+    /* eslint-disable no-console */
     console.error('\n\n');
     console.error('--------------------------------------------------------------------------------');
     console.error('🚨 ERRO DE CONFIGURAÇÃO!');
@@ -24,14 +26,14 @@ export function validateEnv(config: Record<string, unknown>) {
 
     console.error('\n');
     console.error('💡 Verifique se:');
-    console.error('   - todas as variáveis obrigatórias estão preenchidas no arquivo .env.');
-    console.error('   - existem variáveis no arquivo .env que não são esperadas pela aplicação.');
-    console.error('   - a tipagem dos valores está correta.');
+    console.error('   - todas as variáveis obrigatórias estão preenchidas no arquivo .env');
+    //console.error('   - existem variáveis no arquivo .env que não são esperadas pela aplicação');
+    console.error('   - a tipagem dos valores está correta');
     console.error('   - está tudo de acordo com a documentação');
     console.error('--------------------------------------------------------------------------------');
     console.error('\n\n');
+    /* eslint-enable no-console */
 
-    //throw new Error('Configuração de ambiente inválida');
     process.exit(1);
   }
 

@@ -13,14 +13,6 @@ export class AppService {
     // }>,
   ) {}
   getHello(): string {
-    console.log();
-    console.log(`POSTGRESQL_SERVER = ${this.configService.get('POSTGRESQL_SERVER')}`);
-    console.log(`POSTGRESQL_PORT = ${this.configService.get('POSTGRESQL_PORT')}`);
-    console.log(`POSTGRESQL_DATABASE = ${this.configService.get('POSTGRESQL_DATABASE')}`);
-    console.log();
-    console.log(`POSTGRESQL_PORT com configService: ${typeof this.configService.get('POSTGRESQL_PORT')}`);
-    console.log(`POSTGRESQL_PORT com process.env: ${typeof process.env.POSTGRESQL_USER}`);
-    console.log();
     return 'Hello World!';
   }
 }

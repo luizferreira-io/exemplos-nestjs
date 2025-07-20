@@ -7,7 +7,7 @@ import { validateEnv } from './config/env-validation';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validate: validateEnv, // Usa nossa função de validação personalizada
+      validate: validateEnv, // Usa a função de validação personalizada
       isGlobal: true, // Registra o módulo globalmente
       // Especificando arquivos .env:
       //   envFilePath: '.env',

@@ -6,7 +6,7 @@ export const dotEnvSchema = Joi.object({
 
   // Banco de dados
   POSTGRESQL_SERVER: Joi.string().required(),
-  POSTGRESQL_PORT: Joi.number().required().max(65535),
+  POSTGRESQL_PORT: Joi.number().required().port(),
   POSTGRESQL_DATABASE: Joi.string().required(),
   POSTGRESQL_USER: Joi.string().required(),
   POSTGRESQL_PASSWORD: Joi.string().required(),
